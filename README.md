@@ -1,0 +1,1 @@
+This repository was created for a lab exercise to explore GitHub and Jupyter Notebook. During this session, I learned how to create a repository, edit files, make commits, and use Jupyter Notebook for running code and creating Markdown cells.
