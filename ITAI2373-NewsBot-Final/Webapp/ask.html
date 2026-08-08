@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Ask NewsBot{% endblock %}
+{% block content %}
+
+<section class="hero hero-compact">
+    <p class="eyebrow">Module D &middot; Conversational Interface</p>
+    <h1>Ask NewsBot in plain English</h1>
+    <p class="hero-sub">Try things like <em>&ldquo;positive technology news&rdquo;</em>, <em>&ldquo;show me sports articles&rdquo;</em>, or <em>&ldquo;summarize the top business story&rdquo;</em>. NewsBot searches the bundled sample corpus and responds.</p>
+</section>
+
+<section class="panel">
+    <form action="{{ url_for('ask') }}" method="POST" id="askForm">
+        <label for="query">Your question</label>
+        <input type="text" name="query" id="query" value="{{ query }}" placeholder="e.g. positive technology news" required>
+        <button type="submit" class="btn-primary"><span class="btn-label">Ask</span></button>
+    </form>
+</section>
+
+{% if answer %}
+<section class="answer-panel">
+    <p class="answer-message">{{ answer.message }}</p>
+
+    {% if answer.summary %}
+    <div class="result-card">
+        <h2>Summary</h2>
+        <p class="summary-text">{{ answer.summary }}</p>
+    </div>
+    {% endif %}
+
+    {% if answer.articles %}
+    <div class="article-list">
+        {% for article in answer.articles %}
+        <div class="article-card">
+            <div class="article-head">
+                <span class="badge badge-category small">{{ article.category }}</span>
+                <span class="article-score">match: {{ (article.score * 100) | round(1) }}%</span>
+            </div>
+            <h3>{{ article.title }}</h3>
+            <p>{{ article.text }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+{% endblock %}

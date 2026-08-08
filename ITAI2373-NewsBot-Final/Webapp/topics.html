@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Topic Discovery - NewsBot{% endblock %}
+{% block content %}
+
+<section class="hero hero-compact">
+    <p class="eyebrow">Module A &middot; Topic Discovery</p>
+    <h1>Themes found in the sample corpus</h1>
+    <p class="hero-sub">Latent Dirichlet Allocation (LDA) surfaces hidden topics across the bundled sample articles &mdash; the same technique used in the notebook's TopicDiscoveryEngine, applied here without needing you to supply your own corpus.</p>
+</section>
+
+<section class="topic-grid">
+    {% if topics %}
+        {% for topic in topics %}
+        <div class="topic-card">
+            <span class="topic-index">Topic {{ topic.topic_id + 1 }}</span>
+            <div class="topic-words">
+                {% for word in topic.top_words %}
+                <span class="topic-word">{{ word }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-note">Topic modeling is currently unavailable. See the engine status on the Analyze page.</p>
+    {% endif %}
+</section>
+
+{% endblock %}

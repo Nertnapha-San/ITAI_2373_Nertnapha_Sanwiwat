@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Analysis Results - NewsBot{% endblock %}
+{% block content %}
+
+<section class="hero hero-compact">
+    <p class="eyebrow">Analysis Results</p>
+    <h1>Here's what NewsBot found</h1>
+</section>
+
+<section class="results-grid">
+
+    <div class="result-card wide">
+        <h2>Original Text</h2>
+        <p class="original-text">{{ result.original_text }}</p>
+        <div class="stat-strip">
+            <div class="stat"><span class="stat-number">{{ result.statistics.word_count }}</span><span class="stat-label">Words</span></div>
+            <div class="stat"><span class="stat-number">{{ result.statistics.sentence_count }}</span><span class="stat-label">Sentences</span></div>
+            <div class="stat"><span class="stat-number">{{ result.statistics.character_count }}</span><span class="stat-label">Characters</span></div>
+        </div>
+    </div>
+
+    <div class="result-card">
+        <h2>Classification</h2>
+        <div class="badge badge-category">{{ result.classification.primary_category }}</div>
+        <p class="confidence-note">{{ (result.classification.confidence * 100) | round(1) }}% confidence</p>
+        {% if result.classification.alternatives %}
+        <div class="bar-list">
+            {% for alt in result.classification.alternatives %}
+            <div class="bar-row">
+                <span class="bar-label">{{ alt.category }}</span>
+                <div class="bar-track"><div class="bar-fill" style="width: {{ (alt.confidence * 100) | round(1) }}%;"></div></div>
+                <span class="bar-value">{{ (alt.confidence * 100) | round(1) }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="result-card">
+        <h2>Sentiment</h2>
+        <div class="badge badge-sentiment-{{ result.sentiment.label.lower() }}">{{ result.sentiment.label }}</div>
+        <p class="confidence-note">{{ (result.sentiment.confidence * 100) | round(1) }}% confidence &middot; {{ result.sentiment.method }}</p>
+    </div>
+
+    <div class="result-card">
+        <h2>Language</h2>
+        <div class="badge badge-language">{{ result.language.language | upper }}</div>
+        <p class="confidence-note">{{ (result.language.confidence * 100) | round(1) }}% confidence &middot; {{ result.language.method }}</p>
+    </div>
+
+    <div class="result-card wide">
+        <h2>Summary</h2>
+        <p class="summary-text">{{ result.summary.summary }}</p>
+        <p class="method-note">Method: {{ result.summary.method }}</p>
+    </div>
+
+    <div class="result-card wide">
+        <h2>Named Entities</h2>
+        {% if result.entities %}
+        <div class="entity-grid">
+            {% for entity in result.entities %}
+            <div class="entity-chip">
+                <span class="entity-text">{{ entity.text }}</span>
+                <span class="entity-label">{{ entity.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-note">No named entities were detected in this text.</p>
+        {% endif %}
+    </div>
+
+</section>
+
+<div class="action-row">
+    <a href="{{ url_for('home') }}" class="btn-secondary">Analyze another article</a>
+    <a href="{{ url_for('ask') }}" class="btn-secondary">Ask NewsBot a question</a>
+</div>
+
+{% endblock %}
